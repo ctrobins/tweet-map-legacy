@@ -102,7 +102,7 @@ export default class Map extends React.Component {
 		this.setState({
 			colors: colorObj
 		})
-		
+
 	}
 
 	handleDropdown(event) {
@@ -153,26 +153,30 @@ export default class Map extends React.Component {
 					<b>{this.state.searched}</b>
 				</div>
 				<div className='map'>
-					<Datamap
-						scope="usa"
-						height='100%'
+				  
+					<Datamap height='100%'
 						width='100%'
+						scope="usa"
 						position='absolute'
 						geographyConfig={{
 							highlightBorderColor: 'lightBlue',
 							highlightFillColor: 'yellow',
-							popupTemplate: (geography, data) => {
-								return `<div class='hoverinfo'><b><i>${data.fillKey}%</i><br>${geography.properties.name} Tweets</b> ${data.text.map((tweet, i) => {
-									let underlineTweet = this.makeUnderline(tweet, [this.state.searched, this.state.searched + 's', this.state.searched + 'es']);
-									return '<br><br>' + (i+1) + '. ' + underlineTweet;
-								})}
-								</div>`
-							},
-							highlightBorderWidth: 3
-						}}
+							// popupTemplate: (geography, data) => {
+							// 	return `<div> ${data.text} </div>`
+							// 	// return `<div class='hoverinfo'><b><i>${data.fillKey}%</i><br>${geography.properties.name} Tweets</b> ${data.text.map((tweet, i) => {
+							// 	// 	let underlineTweet = this.makeUnderline(tweet, [this.state.searched, this.state.searched + 's', this.state.searched + 'es']);
+							// 	// 	return '<br><br>' + (i+1) + '. ' + underlineTweet;
+							// 	// })}
+							// 	// </div>`
+							}}
+						 />
+						{/* {/* scope="usa"
+						height='100%'
+						width='100%'
+						position='absolute' 
 						fills={this.state.colors}
 						data={this.state.states}
-					labels />
+					labels />  */}
 				</div>
 			</div>
 		)

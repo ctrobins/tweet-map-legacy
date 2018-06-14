@@ -71,14 +71,14 @@ const acronyms = {
 
 let count = 0;
 
-const stream = twit.stream('statuses/filter', {locations: US});
+const stream = twit.stream('statuses/sample'); //, {locations: US});
 
 stream.on('tweet', (tweet) => {
-  count++;
-  console.log(tweet.text);
+  if (tweet.place) {
+    count++;
+    console.log(tweet.text);
 
-  if (tweet.place && (tweet.place.place_type === 'city' || tweet.place.place_type === 'admin')) {
-    if (tweet.place.country_code === 'US') {
+    if (tweet.place.country_code === 'US' && (tweet.place.place_type === 'city' || tweet.place.place_type === 'admin')) {
       var state = undefined;
       if (tweet.place.place_type  === 'city') {
         // Get state abbreviation from the end of the place name
@@ -101,12 +101,12 @@ stream.on('tweet', (tweet) => {
     }
 
     // Temporarily using this table just to match the style of the original project
-    if (state !== undefined) {
-      db.saveStateTweet({
-        state: state,
-        text: tweetText
-      });
-    }
+    // if (state !== undefined) {
+    //   db.saveStateTweet({
+    //     state: state,
+    //     text: tweetText
+    //   });
+    // }
     // This is the real table we will use for both US and international tweets
     db.saveTweet({
       place: tweet.place.full_name,
@@ -118,6 +118,8 @@ stream.on('tweet', (tweet) => {
       link: `https://twitter.com/statuses/${tweet.id_str}`,
       latitude: tweet.place.bounding_box.coordinates[0][0][1],
       longitude: tweet.place.bounding_box.coordinates[0][0][0],
+      radius: 1,
+      significance: tweetText,
     });
   }
 });
@@ -130,4 +132,4 @@ const stopStream = () => {
 // Just keeping this temporarily until we get the cron job working
 setTimeout(() => {
   stopStream();
-}, 15 * 60 * 1000);
+}, 60 * 60 * 1000);

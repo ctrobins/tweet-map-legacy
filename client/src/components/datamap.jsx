@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Datamaps from 'datamaps';
+import axios from 'axios';
 
 const MAP_CLEARING_PROPS = [
   'height', 'scope', 'setProjection', 'width'
@@ -33,13 +34,25 @@ export default class Datamap extends React.Component {
   constructor(props) {
 		super(props);
 		this.resizeMap = this.resizeMap.bind(this);
+		this.state = {
+			bubbles: [],
+		}
   }
 
   componentDidMount() {
 		if (this.props.responsive) {
 			window.addEventListener('resize', this.resizeMap);
 		}
-		this.drawMap();
+		axios.get('/bubbles')
+			.then((response) => {
+				this.setState({
+					bubbles: response.data
+				});
+				this.drawMap();
+			}).catch((err) => {
+				return console.error(err);
+			});
+			console.log(this.state.bubbles);
   }
 
   componentWillReceiveProps(newProps) {
@@ -49,7 +62,7 @@ export default class Datamap extends React.Component {
   }
 
   componentDidUpdate() {
-		this.drawMap();
+		
   }
 
   componentWillUnmount() {
@@ -92,22 +105,41 @@ export default class Datamap extends React.Component {
 				// ...props,
 				scope: this.props.scope,
 				labels: this.props.labels,
-				fills: this.props.fills,
+				//fills: this.props.fills,
 				element: this.refs.container,
-				geographyConfig: this.props.geographyConfig,
-				data
+			 	geographyConfig: this.props.geographyConfig,
+			//extend({popupTemplate = (geography, data) => {
+			// 		return `<div class='hoverinfo'><b><i>${data.fillKey}%</i><br>${geography.properties.name} Tweets</b> ${data.text.map((tweet, i) => {
+			// 			let underlineTweet = this.makeUnderline(tweet, [this.state.searched, this.state.searched + 's', this.state.searched + 'es']);
+			// 			return '<br><br>' + (i+1) + '. ' + underlineTweet;
+			// 		}));
+			// ),
+				bubblesConfig: {
+					borderColor: '#000000',
+					fillOpacity: 0.2,
+					borderOpacity: 0.2,
+				}
+				// data,
 			});
+			map.options.fills = {defaultFill: '#000000'}
+			map.bubbles(this.state.bubbles, {
+				popupTemplate: function (geo, data) {
+					return ['<div class="hoverinfo">' +  data.place,
+						'<br/>' +  data.text + 
+						'</div>'].join('');
+				}
+});
 		} else {
 				map.options.fills = this.props.fills;
         map.updateChoropleth(data, updateChoroplethOptions);
 			}
-      map.legend();
+      //map.legend();
 			if (arc) {
 				map.arc(arc, arcOptions);
 			}
 
 			if (bubbles) {
-		  	map.bubbles(bubbles, bubbleOptions);
+		  
 			}
 
 			if (graticule) {

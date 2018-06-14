@@ -27,7 +27,10 @@ const stateKeyword = mongoose.model("StateKeyword",
   new Schema({}), "statekeywords");
 
 const Tweet = mongoose.model("Tweet",
-  new Schema({ place: String, state: String, country: String, text: String, username: String, link: String, createdAt: Date, latitude: Number, longitude: Number}), "Tweets");
+  new Schema({ place: String, state: String, country: String, text: String, username: String, link: String, createdAt: Date, latitude: Number, longitude: Number, radius: Number}), "Tweets");
+
+const Bubble = mongoose.model("Bubble",
+  new Schema({ place: String, state: String, country: String, text: String, username: String, link: String, createdAt: Date, latitude: Number, longitude: Number, radius: Number}), "Bubbles");
 
 // const keywordSchema = mongoose.Schema({}, { strict: false, versionKey: false });
 // const stateKeywordCreate = mongoose.model("stateKeyword", keywordSchema);
@@ -171,7 +174,7 @@ const saveStateTweet = (data) => {
 }
 
 const saveTweet = (data) => {
-  Tweet(data).save();
+  Bubble(data).save();
 }
 
 const saveNationalTrend = (data) => {
@@ -242,6 +245,19 @@ const getStatePercentages = async keyword => {
   return percentsObj;
 };
 
+const configBubble = () => {
+  console.log('CONFIG BUBBLE!');
+  Tweet.update({county: 'AU'}, {radius: 1});
+}
+
+const getBubbles = (callback) => {
+  Bubble.find({}, (err, data) => {
+    if (!err) {
+      callback(null, data);
+    }
+  });
+}
+
 module.exports = {
   saveTweet: saveTweet,
   saveStateTweet: saveStateTweet,
@@ -249,5 +265,7 @@ module.exports = {
   saveGlobalTrend: saveGlobalTrend,
   getNationalTrends: getNationalTrends,
   getStateKeywords: getStateKeywords,
-  getStatePercentages: getStatePercentages
+  getStatePercentages: getStatePercentages,
+  configBubble: configBubble,
+  getBubbles: getBubbles,
 };

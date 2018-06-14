@@ -19,6 +19,16 @@ app.get('/keywords', async (req, res) => {
   res.send(keywords);
 });
 
+app.get('/bubbles', (req, res) => {
+  db.getBubbles((err, data) => {
+    if (err) {
+      res.status(404).end();
+    } else {
+      res.send(data);
+    }
+  });
+});
+
 app.post('/statepercentages', async (req, res) => {
   console.log('POST request for state percentages for', req.body.word);
   let percents = await db.getStatePercentages(req.body);
