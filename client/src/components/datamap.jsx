@@ -58,6 +58,7 @@ export default class Datamap extends React.Component {
   componentWillReceiveProps(newProps) {
 		if (propChangeRequiresMapClear(this.props, newProps)) {
 			this.clear();
+			this.drawMap();
 		}
   }
 

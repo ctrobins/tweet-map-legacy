@@ -17,7 +17,8 @@ export default class Map extends React.Component {
 			selectValue: 'Top National Trends',
       colors: {},
 			textbox: '',
-			searched: ''
+			searched: '',
+			scope: "usa"
 		}
     this.handleDropdown = this.handleDropdown.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,7 +26,13 @@ export default class Map extends React.Component {
   }
   componentWillMount() {
     this.getNationalTrends();
-  }
+	}
+	
+	changeScope(scope) {
+		this.setState({
+			scope: scope
+		});
+	}
 
   getNationalTrends() {
 		axios.get('/nationaltrends')
@@ -133,6 +140,7 @@ export default class Map extends React.Component {
 		return input.replace(new RegExp('(\\b)(' + wordsToUnderline.join('|') + ')(\\b)','ig'), '$1<u>$2</u>$3');
 	}
 
+
   render() {
 		return (
 			<div>
@@ -142,6 +150,18 @@ export default class Map extends React.Component {
           <input type="submit" value="Populate Map" />
         </form>
         <br></br>
+				<span className={this.state.scope === "usa"
+          ? 'nav-selected'
+          : 'nav-unselected'}
+          onClick={() => this.changeScope("world")}>
+				USA </span>
+				<span className={this.state.scope === "world"
+          ? 'nav-selected'
+          : 'nav-unselected'}
+          onClick={() => this.changeScope("usa")}>
+				World </span>
+				<br></br>
+				<br></br>
 					<select defaultValue={this.state.selectValue} onChange={this.handleDropdown}>
             <option defaultValue hidden>Top National Trends</option>
 						{this.state.nationalTrends.map((trend, i) => (
@@ -156,7 +176,7 @@ export default class Map extends React.Component {
 				  
 					<Datamap height='100%'
 						width='100%'
-						scope="usa"
+						scope={this.state.scope}
 						position='absolute'
 						geographyConfig={{
 							highlightBorderColor: 'lightBlue',
