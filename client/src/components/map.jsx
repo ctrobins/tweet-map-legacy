@@ -29,6 +29,7 @@ export default class Map extends React.Component {
 	}
 	
 	changeScope(scope) {
+		console.log('CHANGING TO', scope);
 		this.setState({
 			scope: scope
 		});
@@ -153,12 +154,12 @@ export default class Map extends React.Component {
 				<span className={this.state.scope === "usa"
           ? 'nav-selected'
           : 'nav-unselected'}
-          onClick={() => this.changeScope("world")}>
+          onClick={() => this.changeScope("usa")}>
 				USA </span>
 				<span className={this.state.scope === "world"
           ? 'nav-selected'
           : 'nav-unselected'}
-          onClick={() => this.changeScope("usa")}>
+          onClick={() => this.changeScope("world")}>
 				World </span>
 				<br></br>
 				<br></br>

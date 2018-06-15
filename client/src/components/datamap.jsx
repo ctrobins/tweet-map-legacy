@@ -36,6 +36,7 @@ export default class Datamap extends React.Component {
 		this.resizeMap = this.resizeMap.bind(this);
 		this.state = {
 			bubbles: [],
+			isSwitching: false,
 		}
   }
 
@@ -58,12 +59,19 @@ export default class Datamap extends React.Component {
   componentWillReceiveProps(newProps) {
 		if (propChangeRequiresMapClear(this.props, newProps)) {
 			this.clear();
-			this.drawMap();
+			this.setState({
+				isSwitching: true
+			});
 		}
   }
 
   componentDidUpdate() {
-		
+		if (this.state.isSwitching) {
+			this.drawMap();
+			this.setState({
+				isSwitching: false
+			})
+		}
   }
 
   componentWillUnmount() {
@@ -109,12 +117,6 @@ export default class Datamap extends React.Component {
 				//fills: this.props.fills,
 				element: this.refs.container,
 			 	geographyConfig: this.props.geographyConfig,
-			//extend({popupTemplate = (geography, data) => {
-			// 		return `<div class='hoverinfo'><b><i>${data.fillKey}%</i><br>${geography.properties.name} Tweets</b> ${data.text.map((tweet, i) => {
-			// 			let underlineTweet = this.makeUnderline(tweet, [this.state.searched, this.state.searched + 's', this.state.searched + 'es']);
-			// 			return '<br><br>' + (i+1) + '. ' + underlineTweet;
-			// 		}));
-			// ),
 				bubblesConfig: {
 					borderColor: '#000000',
 					fillOpacity: 0.2,
@@ -161,11 +163,7 @@ export default class Datamap extends React.Component {
 			height: this.props.height,
 			width: this.props.width,
 			position: this.props.position,
-			// height: '600px'
-			//Originally in here but spread operator is not working for us. Tried pulling props out manually, hopefully didn't miss anything
-			// ...this.props.style
 	  };
-
 	  return <div ref="container" style={style} />;
 	}
 
