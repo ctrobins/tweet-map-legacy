@@ -59,6 +59,23 @@ const Tweet = mongoose.model(
   }), 'Tweets',
 );
 
+const Test = mongoose.model(
+  'Test',
+  new Schema({
+    place: String,
+    state: String,
+    country: String,
+    text: String,
+    username: String,
+    tweetedAt: Date,
+    latitude: Number,
+    longitude: Number,
+    radius: Number,
+    createdAt: { type: Date, expires: 24 * 60 * 60 }
+  }), 'Test',
+);
+
+
 //
 // ─── SAVE TO DB ─────────────────────────────────────────────────────────────────
 //
