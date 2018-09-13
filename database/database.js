@@ -47,6 +47,7 @@ const stateKeyword = mongoose.model(
 const Tweet = mongoose.model(
   'Tweet',
   new Schema({
+    id: { type: String, unique: true},
     place: String,
     state: String,
     country: String,
@@ -59,22 +60,7 @@ const Tweet = mongoose.model(
   }), 'Tweets',
 );
 
-const Test = mongoose.model(
-  'Test',
-  new Schema({
-    place: String,
-    state: String,
-    country: String,
-    text: String,
-    username: String,
-    tweetedAt: Date,
-    latitude: Number,
-    longitude: Number,
-    radius: Number,
-    createdAt: { type: Date, expires: 5 * 60 }
-  }), 'Test',
-);
-
+    //createdAt: { type: Date, expires: 5 * 60 }
 
 //
 // ─── SAVE TO DB ─────────────────────────────────────────────────────────────────
@@ -88,13 +74,55 @@ const saveTweet = (data) => {
 };
 
 const saveNationalTrend = (data) => {
-  nationalTrend(data).save();
+  return new Promise((resolve, reject) => {
+    nationalTrend(data).save((err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
 };
 
 const saveGlobalTrend = (data) => {
-  globalTrend(data).save();
+  return new Promise((resolve, reject) => {
+    globalTrend(data).save((err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
 };
 
+//
+// ─── CLEAR FROM DB ─────────────────────────────────────────────────────────────────
+//
+const clearNationalTrends = (callback) => {
+  nationalTrend.remove({}, (err) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null);
+    }
+  });
+};
+
+const clearGlobalTrends = (callback) => {
+  globalTrend.remove({}, (err) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null);
+    }
+  });
+};
+
+const endConnection = () => {
+  mongoose.disconnect();
+};
 
 //
 // ─── MANIPULATE DATA ────────────────────────────────────────────────────────────
@@ -285,6 +313,9 @@ module.exports = {
   saveStateTweet,
   saveNationalTrend,
   saveGlobalTrend,
+  clearNationalTrends,
+  clearGlobalTrends,
+  endConnection,
   getBubbles,
   getNationalTrends,
   getGlobalTrends,

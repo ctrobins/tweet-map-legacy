@@ -11,8 +11,8 @@ export default class Map extends React.Component {
     super();
     this.state = {
       states: [],
-	  nationalTrends: [],
-	  globalTrends: [],
+	    nationalTrends: [],
+	    globalTrends: [],
       selectValue: 'Top National Trends',
       colors: {},
       textbox: '',

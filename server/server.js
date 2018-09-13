@@ -13,8 +13,8 @@ const User = require('../database/user');
 app.use(express.static(`${__dirname}/../client/dist/`));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
-cronJobUS.start();
-cronJobWorld.start();
+//cronJobUS.start();
+//cronJobWorld.start();
 
 //
 // ─── NATIVE ENDPOINTS ───────────────────────────────────────────────────────────
