@@ -70,7 +70,7 @@ let count = 0;
 //
 // ─── CRONJOB ────────────────────────────────────────────────────────────────────
 //
-const cronJobUS = new CronJob ('16 * * * *', () => {
+const cronJobUS = new CronJob ('0 * * * *', () => {
     console.log('Starting new US stream via CronJob.');
     // Create a new stream
     let streamUS = twit.stream('statuses/filter', {locations: US});
@@ -86,7 +86,7 @@ const cronJobUS = new CronJob ('16 * * * *', () => {
   null, true, 'America/Los_Angeles',
 );
 
-const cronJobWorld = new CronJob ('16 * * * *', () => {
+const cronJobWorld = new CronJob ('10 * * * *', () => {
   console.log('Starting new World stream via CronJob.');
   // Create a new stream
   let streamWorld = twit.stream('statuses/sample');
@@ -141,7 +141,7 @@ const twitStream = (stream, scope) => {
         latitude: tweet.place.bounding_box.coordinates[0][0][1],
         longitude: tweet.place.bounding_box.coordinates[0][0][0],
         radius: 2.5,
-        created_at: Date.now,
+        createdAt: Date.now(),
       });
     }
   });

@@ -71,7 +71,7 @@ const Test = mongoose.model(
     latitude: Number,
     longitude: Number,
     radius: Number,
-    createdAt: { type: Date, expires: 24 * 60 * 60 }
+    createdAt: { type: Date, expires: 5 * 60 }
   }), 'Test',
 );
 
