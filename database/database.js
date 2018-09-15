@@ -53,7 +53,7 @@ const Tweet = mongoose.model(
     country: String,
     text: String,
     username: String,
-    createdAt: Date,
+    createdAt: { type: Date, expires: 2 * 24 * 60 * 60 },
     latitude: Number,
     longitude: Number,
     radius: Number
