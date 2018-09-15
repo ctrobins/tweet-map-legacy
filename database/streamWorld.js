@@ -93,6 +93,7 @@ const twitStream = (stream, scope) => {
             }
             
             db.saveTweet({
+                id: tweet.id_str,
                 place: tweet.place.full_name,
                 state,
                 country: tweet.place.country_code,
@@ -119,4 +120,4 @@ setTimeout(() => {
     streamWorld.stop();
     db.endConnection();
     console.log(`Stored ${count} World tweets!`);
-}, 30 * 60 * 1000);
+}, 25 * 60 * 1000);
