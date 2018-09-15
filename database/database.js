@@ -70,7 +70,7 @@ const saveStateTweet = (data) => {
 };
 
 const saveTweet = (data) => {
-  Tweet(data).save();
+  Tweet(data).save(err => err ? console.log('duplicate') : null);
 };
 
 const saveNationalTrend = (data) => {
@@ -287,7 +287,7 @@ const getStateSentiments = async (keyword) => {
     },
   ]);
 
-  console.log('STATETWEETS OBJECT', stateTweets.map(el => [el.state, el.text.length]));
+  //console.log('STATETWEETS OBJECT', stateTweets.map(el => [el.state, el.text.length]));
 
   const sentimentsObj = {};
   const promiseArr = [];

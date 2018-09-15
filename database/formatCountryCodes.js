@@ -260,7 +260,7 @@ const formatData = (data) => {
   for (const country of data) {
     fs.appendFileSync(filePath, country.alpha3);
     fs.appendFileSync(filePath, ': {},');
-    console.log(country.alpha3);
+    //console.log(country.alpha3);
     fs.appendFileSync(filePath, '\n');
   }
   fs.appendFileSync(filePath, '}');

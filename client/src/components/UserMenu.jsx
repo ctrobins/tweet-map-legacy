@@ -22,7 +22,7 @@ class UserMenu extends React.Component {
   }
 
   getFirstName(txt) {
-    console.log('FULL NAME', txt);
+    //console.log('FULL NAME', txt);
     return (txt.match(/^\w+/g));
   }
 

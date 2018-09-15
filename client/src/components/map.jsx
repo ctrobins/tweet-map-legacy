@@ -77,7 +77,7 @@ export default class Map extends React.Component {
   // ─── GET TWEET DATA ─────────────────────────────────────────────────────────────
   //
   postStatePercentages(searchTerm) {
-    console.log('Keyword:', searchTerm);
+    //console.log('Keyword:', searchTerm);
     this.state.fetchInProgress = true;
     if (searchTerm !== '') {
       axios.post('/statepercentages', { word: searchTerm }).then((response) => {
@@ -88,7 +88,7 @@ export default class Map extends React.Component {
   }
 
   postCountryPercentages(searchTerm) {
-    console.log('Keyword:', searchTerm);
+    //console.log('Keyword:', searchTerm);
     this.state.fetchInProgress = true;
     if (searchTerm !== '') {
       axios.post('/countrypercentages', { word: searchTerm }).then((response) => {
@@ -99,7 +99,7 @@ export default class Map extends React.Component {
   }
 
   postStateSentiments(searchTerm) {
-    console.log('Keyword:', searchTerm);
+    //console.log('Keyword:', searchTerm);
     if (searchTerm !== '') {
       this.state.fetchInProgress = true;
       axios.post('/statesentiments', { word: searchTerm }).then((response) => {
@@ -174,7 +174,7 @@ export default class Map extends React.Component {
       states: statesCopy,
     });
     this.setSentimentFills();
-    setTimeout(() => console.log(this.state.states), 1000);
+    //setTimeout(() => console.log(this.state.states), 1000);
   }
 
   setTrends(data) {
@@ -236,7 +236,7 @@ export default class Map extends React.Component {
     for (let state in this.state.states) {
       colorObj[this.state.states[state].fillKey] = colors(this.state.states[state].fillKey);
     }
-    console.log('COLOROBJ', colorObj);
+    //console.log('COLOROBJ', colorObj);
     this.setState({
       colors: colorObj,
     });
@@ -264,7 +264,7 @@ export default class Map extends React.Component {
 
   handleSubmit(event) {
     if (this.props.loggedIn)
-      axios.post('/postterm', { term: this.state.textbox }).then(console.log);
+      axios.post('/postterm', { term: this.state.textbox });
     this.state.scope === 'usa'
       ? this.postStatePercentages(this.state.textbox)
       : this.postCountryPercentages(this.state.textbox);

@@ -12,7 +12,7 @@ const User = require('../database/user');
 //
 app.use(express.static(`${__dirname}/../client/dist/`));
 app.use(bodyParser.json());
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 cronJobUS.stop();
 cronJobWorld.stop();
 
@@ -58,7 +58,7 @@ app.post('/countrypercentages', async (req, res) => {
 app.post('/statesentiments', (req, res) => {
   db.getStateSentiments(req.body)
     .then(sentiments => {
-      console.log('SENTIMENT DATA', sentiments);
+      //console.log('SENTIMENT DATA', sentiments);
       res.send(sentiments);
     })
     .catch(console.log);
