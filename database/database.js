@@ -69,8 +69,8 @@ const saveStateTweet = (data) => {
   stateTweet(data).save();
 };
 
-const saveTweet = (data) => {
-  Tweet(data).save(err => err ? console.log('duplicate') : null);
+const saveTweet = (data, counter) => {
+  Tweet(data).save(err => err ? console.log('duplicate') : counter());
 };
 
 const saveNationalTrend = (data) => {

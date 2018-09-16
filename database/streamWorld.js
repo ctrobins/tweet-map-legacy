@@ -67,7 +67,6 @@ const acronyms = {
 
 const twitStream = (stream, scope) => {
     stream.on('tweet', (tweet) => {
-        count += 1;
         //console.log(scope, tweet.text);
         
         if (tweet.place && (tweet.place.place_type === 'city' || tweet.place.place_type === 'admin')) {
@@ -105,7 +104,7 @@ const twitStream = (stream, scope) => {
                 longitude: tweet.place.bounding_box.coordinates[0][0][0],
                 radius: 2.5,
                 createdAt: Date.now(),
-            });
+            }, () => count+=1);
         }
     });
 };
