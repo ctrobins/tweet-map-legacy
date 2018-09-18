@@ -64,14 +64,11 @@ const acronyms = {
     Wyoming: 'WY',
 };
 
-
 const twitStream = (stream, scope) => {
     stream.on('tweet', (tweet) => {
-        //console.log(scope, tweet.text);
-        
-        if (tweet.place && (tweet.place.place_type === 'city' || tweet.place.place_type === 'admin')) {
+        if (tweet.place) {
             let state;
-            if (tweet.place.country_code === 'US') {
+            if (tweet.place.country_code === 'US' && (tweet.place.place_type === 'city' || tweet.place.place_type === 'admin')) {
                 if (tweet.place.place_type === 'city') {
                     // Get state abbreviation from the end of the place name
                     state = tweet.place.full_name.slice(tweet.place.full_name.length - 2);
@@ -104,14 +101,17 @@ const twitStream = (stream, scope) => {
                 longitude: tweet.place.bounding_box.coordinates[0][0][0],
                 radius: 2.5,
                 createdAt: Date.now(),
-            }, () => count+=1);
+            }, () => {
+                count+=1;
+            });
         }
     });
 };
 
 // Create a new stream
 const streamWorld = twit.stream('statuses/sample');
-
+//const streamWorld = twit.stream('statuses/filter', {locations: ['-177', '80', '-90.0', '90.0']})
+//['-177', '18.0', '-65.0', '72.0'];
 // Start the new stream
 twitStream(streamWorld, 'World');
 
