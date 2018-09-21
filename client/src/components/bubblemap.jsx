@@ -22,7 +22,10 @@ export default class Bubblemap extends React.Component {
             bubbles: [],
             prevSearch: '',
             finishedSearch: false,
-		}
+        }
+        this.getBubbles = this.getBubbles.bind(this);
+        this.clear = this.clear.bind(this);
+        this.drawMap = this.drawMap.bind(this);
   }
 
   componentDidMount() {
@@ -50,7 +53,7 @@ export default class Bubblemap extends React.Component {
         } else if (!this.state.finishedSearch && this.state.prevSearch.length) {
             this.getBubbles(this.state.prevSearch);
         }
-        this.drawMap();
+        //this.drawMap();
   }
 
   componentWillUnmount() {
@@ -97,17 +100,25 @@ export default class Bubblemap extends React.Component {
     }
     
     getBubbles(query) {
-        axios.get(`/bubbles/${query}`)
-                .then((response) => {
-                    this.setState({
-                        bubbles: response.data,
-                        prevSearch: query,
-                        finishedSearch: true
-                    });
-                   this.drawMap(response.data);
-                }).catch((err) => {
-                    return console.error(err);
-                });
+        axios.post('/bubbles', { query: query})
+        .then((response) => {
+            this.setState({
+                bubbles: response.data,
+                prevSearch: query,
+                finishedSearch: true
+            });
+        }).then(this.clear).then(this.drawMap).catch(console.log);
+        // axios.get(`localhost:3000/bubbles/${query}`)
+        //         .then((response) => {
+        //             this.setState({
+        //                 bubbles: response.data,
+        //                 prevSearch: query,
+        //                 finishedSearch: true
+        //             });
+        //             console.log(response.data);
+        //         }).catch((err) => {
+        //             return console.error(err);
+        //         });
     }
 	
 	resizeMap() {

@@ -36,8 +36,20 @@ app.get('/keywords', async (req, res) => {
 
 app.get('/bubbles/:query', (req, res) => {
   const { query } = req.params;
+  db.getBubbles('test', (err, data) => {
+    if (err) {
+      res.status(404).end();
+    } else {
+      res.send(data);
+    }
+  });
+});
+
+app.post('/bubbles', (req, res) => {
+  const { query } = req.body;
   db.getBubbles(query, (err, data) => {
     if (err) {
+      console.log('DATABASE ERROR:', err);
       res.status(404).end();
     } else {
       res.send(data);

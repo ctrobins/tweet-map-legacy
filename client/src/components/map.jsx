@@ -26,6 +26,7 @@ export default class Map extends React.Component {
     this.handleSentimentSubmit = this.handleSentimentSubmit.bind(this);
     this.handleTextboxChange = this.handleTextboxChange.bind(this);
     this.toggleBubble = this.toggleBubble.bind(this);
+    this.getBubbles = this.getBubbles.bind(this);
   }
   componentWillMount() {
 	this.getNationalTrends();
@@ -109,6 +110,15 @@ export default class Map extends React.Component {
     }
   }
 
+  getBubbles(query) {
+    // axios.post('/bubbles', { query: query})
+    //      .then((response) => {
+    //       console.log(response.data);
+    //    }).catch((err) => {
+    //       return console.error(err);
+    //    });
+  }
+
   //
   // ─── MANIPULATE VIEW DATA ───────────────────────────────────────────────────────
   //
@@ -130,7 +140,6 @@ export default class Map extends React.Component {
       states: statesCopy,
     });
     this.setPercentageFills();
-    setTimeout(() => console.log(this.state.states), 1000);
   }
 
   setSentiments(data) {
@@ -249,6 +258,7 @@ export default class Map extends React.Component {
     this.state.scope === 'usa'
       ? this.postStatePercentages(event.target.value)
       : this.postCountryPercentages(event.target.value);
+    this.getBubbles(event.target.value);
     this.setState({
       textbox: '',
       searched: event.target.value,
@@ -268,6 +278,7 @@ export default class Map extends React.Component {
     this.state.scope === 'usa'
       ? this.postStatePercentages(this.state.textbox)
       : this.postCountryPercentages(this.state.textbox);
+    this.getBubbles(event.target.value);
     this.setState({
       textbox: '',
       searched: this.state.textbox,
