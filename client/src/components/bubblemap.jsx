@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Datamaps from 'datamaps';
 import axios from 'axios';
+import ReactLoading from 'react-loading';
 
 const MAP_CLEARING_PROPS = [
   'height', 'scope', 'setProjection', 'width', 'searched'
@@ -26,6 +27,7 @@ export default class Bubblemap extends React.Component {
         this.getBubbles = this.getBubbles.bind(this);
         this.clear = this.clear.bind(this);
         this.drawMap = this.drawMap.bind(this);
+        this.stopLoading = this.stopLoading.bind(this);
   }
 
   componentDidMount() {
@@ -48,11 +50,12 @@ export default class Bubblemap extends React.Component {
   }
 
   componentDidUpdate() {
-        if (this.props.searched.length && this.props.searched !== this.state.prevSearch) {
-            this.getBubbles(this.props.searched);
-        } else if (!this.state.finishedSearch && this.state.prevSearch.length) {
-            this.getBubbles(this.state.prevSearch);
-        }
+        // if (this.props.searched.length && this.props.searched !== this.state.prevSearch) {
+        //     this.getBubbles(this.props.searched);
+        // } 
+        // else if (!this.state.finishedSearch && this.state.prevSearch.length) {
+        //     this.getBubbles(this.state.prevSearch);
+        // }
         //this.drawMap();
   }
 
@@ -65,11 +68,11 @@ export default class Bubblemap extends React.Component {
 
   clear() {
 		const { container } = this.refs;
-
-		for (const child of Array.from(container.childNodes)) {
-			container.removeChild(child);
-		}
-
+        if (container) {
+            for (const child of Array.from(container.childNodes)) {
+                container.removeChild(child);
+            }
+        } 
 		delete this.map;
 	}
 
@@ -104,10 +107,15 @@ export default class Bubblemap extends React.Component {
         .then((response) => {
             this.setState({
                 bubbles: response.data,
-                prevSearch: query,
-                finishedSearch: true
+                prevSearch: query
             });
-        }).then(this.clear).then(this.drawMap).catch(console.log);
+            console.log('Got bubbles');
+        }).then(this.clear)
+          .then(this.drawMap)
+          .then(() => {
+              setTimeout(this.stopLoading, 500); 
+          })
+        .catch(console.log);
         // axios.get(`localhost:3000/bubbles/${query}`)
         //         .then((response) => {
         //             this.setState({
@@ -123,7 +131,13 @@ export default class Bubblemap extends React.Component {
 	
 	resizeMap() {
 	  this.map.resize();
-	}
+    }
+    
+    stopLoading() {
+        this.setState({
+            finishedSearch: true
+        });
+    }
 
 	render() {
 	  const style = {
@@ -131,7 +145,11 @@ export default class Bubblemap extends React.Component {
 			width: this.props.width,
 			position: this.props.position,
 	  };
-	  return <div ref="container" style={style} />;
+      return (this.state.finishedSearch || !this.state.prevSearch.length)
+        ? <div ref="container" style={style} />
+        : (this.props.height === '0%') 
+            ? null
+            : <ReactLoading type="bubbles" width={300} className="center" color="#4e4e4e"/>
 	}
 
 }

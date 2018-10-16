@@ -1,8 +1,6 @@
-// Run this file to generate the top 50 Twitter trends, stored in national-trends.json
-// That file will be importable
+// Run this file to generate the top 50 global Twitter trends
 
 const axios = require('axios');
-//const fs = require('fs');
 const db = require('./database.js');
 
 db.clearGlobalTrends((err) => {
@@ -11,7 +9,7 @@ db.clearGlobalTrends((err) => {
   } else {
     axios.get('https://api.twitter.com/1.1/trends/place.json?id=1', {
       headers: {
-        Authorization: 'Bearer AAAAAAAAAAAAAAAAAAAAAKhl6QAAAAAA7ryEMrycuJRLTZbyiyZmAJ6%2F8HM%3DgeDvD8L50Q0TgKP7cQJge4PLS26U7YvNlnlruVZ4n1HOo0TWJQ',
+        Authorization: process.env.TWITTER_AUTH
       },
     }).then((res) => {
       formatData(res.data[0].trends);
@@ -24,7 +22,7 @@ db.clearGlobalTrends((err) => {
     
     const formatData = (data) => {
       const promises = [];
-      for (const trend of data) {
+      for (let trend of data) {
         count++;
         promises.push(db.saveGlobalTrend({
           trend: trend.name,
@@ -36,13 +34,3 @@ db.clearGlobalTrends((err) => {
     };
   }
 });
-
-// const filePath = './database/national-trends.json';
-
-// await fs.appendFileSync(filePath, JSON.stringify({
-//   trend: trend.name,
-//   rank: count,
-//   date: today
-// }));
-
-// await fs.appendFileSync(filePath, '\n');

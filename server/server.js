@@ -12,7 +12,7 @@ const User = require('../database/user');
 //
 app.use(express.static(`${__dirname}/../client/dist/`));
 app.use(bodyParser.json());
-//app.use(morgan('dev'));
+app.use(morgan('dev'));
 cronJobUS.stop();
 cronJobWorld.stop();
 
@@ -47,6 +47,7 @@ app.get('/bubbles/:query', (req, res) => {
 
 app.post('/bubbles', (req, res) => {
   const { query } = req.body;
+  console.log('Searching bubbles for', query);
   db.getBubbles(query, (err, data) => {
     if (err) {
       console.log('DATABASE ERROR:', err);

@@ -19,7 +19,8 @@ export default class Map extends React.Component {
       searched: '',
       scope: 'usa',
       isBubbles: false,
-      fetchInProgress: false
+      fetchInProgress: false,
+      bubblesInProgress: false
     };
     this.handleDropdown = this.handleDropdown.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,10 +28,11 @@ export default class Map extends React.Component {
     this.handleTextboxChange = this.handleTextboxChange.bind(this);
     this.toggleBubble = this.toggleBubble.bind(this);
     this.getBubbles = this.getBubbles.bind(this);
+    this.stopBubbleSpinner = this.stopBubbleSpinner.bind(this);
   }
   componentWillMount() {
-	this.getNationalTrends();
-	this.getGlobalTrends();
+	  this.getNationalTrends();
+	  this.getGlobalTrends();
     this.useAmericanStates();
   }
 
@@ -79,10 +81,16 @@ export default class Map extends React.Component {
   //
   postStatePercentages(searchTerm) {
     //console.log('Keyword:', searchTerm);
-    this.state.fetchInProgress = true;
+    //this.state.fetchInProgress = true;
+    this.setState({
+      fetchInProgress: true
+    });
     if (searchTerm !== '') {
       axios.post('/statepercentages', { word: searchTerm }).then((response) => {
-        this.state.fetchInProgress = false;
+        //this.state.fetchInProgress = false;
+        this.setState({
+          fetchInProgress: false
+        });
         this.setPercentages(response.data);
       });
     }
@@ -90,10 +98,15 @@ export default class Map extends React.Component {
 
   postCountryPercentages(searchTerm) {
     //console.log('Keyword:', searchTerm);
-    this.state.fetchInProgress = true;
+    this.setState({
+      fetchInProgress: true
+    });
     if (searchTerm !== '') {
       axios.post('/countrypercentages', { word: searchTerm }).then((response) => {
-        this.state.fetchInProgress = false;
+        //this.state.fetchInProgress = false;
+        this.setState({
+          fetchInProgress: false
+        });
         this.setPercentages(response.data);
       });
     }
@@ -102,9 +115,15 @@ export default class Map extends React.Component {
   postStateSentiments(searchTerm) {
     //console.log('Keyword:', searchTerm);
     if (searchTerm !== '') {
-      this.state.fetchInProgress = true;
+      this.setState({
+        fetchInProgress: true
+      });
+      //this.state.fetchInProgress = true;
       axios.post('/statesentiments', { word: searchTerm }).then((response) => {
-        this.state.fetchInProgress = false;
+        //this.state.fetchInProgress = false;
+        this.setState({
+          fetchInProgress: false
+        });
         this.setSentiments(response.data);
       });
     }
@@ -117,6 +136,13 @@ export default class Map extends React.Component {
     //    }).catch((err) => {
     //       return console.error(err);
     //    });
+  }
+
+  stopBubbleSpinner() {
+    console.log('Stopping bubble spinner');
+    this.setState({
+      bubblesInProgress: false
+    });
   }
 
   //
@@ -262,6 +288,7 @@ export default class Map extends React.Component {
     this.setState({
       textbox: '',
       searched: event.target.value,
+      bubblesInProgress: true
     });
     event.preventDefault();
   }
@@ -278,10 +305,11 @@ export default class Map extends React.Component {
     this.state.scope === 'usa'
       ? this.postStatePercentages(this.state.textbox)
       : this.postCountryPercentages(this.state.textbox);
-    this.getBubbles(event.target.value);
+    this.getBubbles(this.state.textbox);
     this.setState({
       textbox: '',
       searched: this.state.textbox,
+      bubblesInProgress: true
     });
     event.preventDefault();
   }
@@ -382,8 +410,8 @@ export default class Map extends React.Component {
   // ─── RENDER ─────────────────────────────────────────────────────────────────────
   //
   render() {
-    let sentimentAnalysisButton =
-      (this.state.scope === 'usa' && !this.state.isBubbles) ? (
+    //let sentimentAnalysisButton =
+      return (this.state.scope === 'usa' && !this.state.isBubbles) ? (
         <button onClick={this.handleSentimentSubmit}>Sentiment Analysis</button>
       ) : (
         ''
@@ -438,7 +466,7 @@ export default class Map extends React.Component {
           <br />
           <b>{this.state.searched}</b>
         </div>
-        {this.state.fetchInProgress ? <ReactLoading type="bubbles" width="300px" className="center" color="#4e4e4e"/> :
+        {(this.state.fetchInProgress) ? <ReactLoading type="bubbles" width={300} className="center" color="#4e4e4e"/> :
         <div className="map">
           <Bubblemap
             height={this.state.isBubbles ? '100%' : '0%'}
@@ -452,6 +480,7 @@ export default class Map extends React.Component {
             searched={this.state.searched}
             isBubbles={this.state.isBubbles}
             fetchInProgress={this.state.fetchInProgress}
+            stopBubbleSpinner={this.stopBubbleSpinner}
           />
           <Datamap
             scope={this.state.scope}

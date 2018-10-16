@@ -1,9 +1,4 @@
-// Commenting out the code below and running this
-// file will populate the database with each state's top keywords
 const mongoose = require('mongoose');
-const dotenv = require('dotenv').config({ silent: true });
-const _ = require('underscore');
-const bodyParser = require('body-parser');
 const axios = require('axios');
 const getSentimentFromTweets = require('./sentiment');
 const country_conversion = require('../client/src/components/country-codes').country_conversion;
@@ -59,8 +54,6 @@ const Tweet = mongoose.model(
     radius: Number
   }), 'Tweets',
 );
-
-    //createdAt: { type: Date, expires: 5 * 60 }
 
 //
 // ─── SAVE TO DB ─────────────────────────────────────────────────────────────────
