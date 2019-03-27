@@ -36,7 +36,7 @@ app.get('/keywords', async (req, res) => {
 
 app.get('/bubbles/:query', (req, res) => {
   const { query } = req.params;
-  db.getBubbles('test', (err, data) => {
+  db.getBubbles(query, (err, data) => {
     if (err) {
       res.status(404).end();
     } else {

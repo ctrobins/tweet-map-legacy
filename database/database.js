@@ -5,7 +5,7 @@ const country_conversion = require('../client/src/components/country-codes').cou
 
 
 mongoose.Promise = global.Promise;
-const mongoPath = process.env.MONGO_URL;
+const mongoPath = 'mongodb://heroku_z7jdmcx4:ab6s64cqob19d6j1gnoog8mqeu@ds155292.mlab.com:55292/heroku_z7jdmcx4';
 mongoose.connect(mongoPath);
 const db = mongoose.connection;
 const Schema = mongoose.Schema;
@@ -279,8 +279,6 @@ const getStateSentiments = async (keyword) => {
       },
     },
   ]);
-
-  //console.log('STATETWEETS OBJECT', stateTweets.map(el => [el.state, el.text.length]));
 
   const sentimentsObj = {};
   const promiseArr = [];
